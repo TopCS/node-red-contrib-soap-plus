@@ -2,6 +2,7 @@
 Node-red nodes that allow users to send SOAP request.
 
 This is a fork from node-red-contrib-soap to publish fixes on NPM
+The original project and its authors deserve full credit for the initial implementation.
 
 ##Usages
 To set up SOAP request, create a new soap config:
@@ -15,6 +16,8 @@ You can also feed in parameters and overwrite configs with an injected msg:
 * You can have `msg.server` to overwrite the WSDL address. This only works with WSDL server with no authentication method.
 * You can have `msg.options` to add in options to the SOAP request.
 * You can have `msg.headers` to add in headers for the SOAP request.
+* You can have `msg.headerFunction` (or `msg.headers` as a function) to dynamically
+  generate SOAP headers.
 * You can feed in `msg.payload.<parameters>` to feed in the parameters you need.
 
 For example, here is the sample flow where we try to send a SOAP request to http://www.webservicex.net/geoipservice.asmx, trying to call the `GetGeoIP` function with an variable IPAddress as 139.130.4.5.
@@ -27,3 +30,4 @@ The returned `msg.payload` would be:
 ```
 { "GetGeoIPResult": { "ReturnCode": 1, "IP": "139.130.4.5", "ReturnCodeDetails": "Success", "CountryName": "Australia", "CountryCode": "AUS" } }
 ```
+
