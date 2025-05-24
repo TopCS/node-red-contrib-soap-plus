@@ -44,11 +44,18 @@ module.exports = function (RED) {
                             break;
                     }
                     node.status({fill: "yellow", shape: "dot", text: "SOAP Request..."});
-                    if(msg.headers){
-                        if (msg.headersOptions){
-                            client.addSoapHeader(msg.headers, msg.headersOptions.name, msg.headersOptions.nameSpace, msg.headersOptions.xmlns);
+                    if (typeof msg.headerFunction === 'function') {
+                        client.addSoapHeader(msg.headerFunction);
+                    } else if (typeof msg.headers === 'function') {
+                        client.addSoapHeader(msg.headers);
+                    } else if (msg.headers) {
+                        if (msg.headersOptions) {
+                            client.addSoapHeader(msg.headers,
+                                msg.headersOptions.name,
+                                msg.headersOptions.nameSpace,
+                                msg.headersOptions.xmlns);
                         } else {
-                            client.addSoapHeader(msg.header);
+                            client.addSoapHeader(msg.headers);
                         }
                     }
 
@@ -70,9 +77,7 @@ module.exports = function (RED) {
                 });
             });
         } catch (err) {
-            msg.payload = err.message;
-            node.showerror(msg, msg.payload)
-
+            node.error(err);
         }
     }
     RED.nodes.registerType("soap request plus", SoapCallPlus);
